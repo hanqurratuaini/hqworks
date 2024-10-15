@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manga Recommendation</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Manga Recommendation App</h1>
+    <form id="recommendation-form">
+      <label for="preferred-genre">Preferred Genre:</label>
+      <input type="text" id="preferred-genre" name="preferred_genre" required>
+      
+      <label for="last-read-manga">Last Read Manga:</label>
+      <input type="text" id="last-read-manga" name="last_read_manga" required>
+      
+      <label for="complete-series">Complete Series (Yes/No):</label>
+      <input type="text" id="complete-series" name="complete_series" required>
+      
+      <button type="submit">Get Recommendation</button>
+    </form>
+    
+    <div id="recommendation-output"></div>
+  </div>
+
+  <script src="/static/js/script.js"></script>
+</body>
+</html>

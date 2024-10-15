@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import openai
 from langchain.llms import OpenAI
 from dotenv import load_dotenv
@@ -21,6 +21,11 @@ def get_manga_recommendation(preferred_genre, last_read_manga, complete_series):
     """
     response = llm(prompt)
     return response.strip()
+
+# Route to render the front-end page
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 # Route for recommendations
 @app.route('/recommend', methods=['POST'])

@@ -13,29 +13,39 @@ app = Flask(__name__)
 openai.api_key = os.getenv("OPENAI_API_KEY")
 llm = OpenAI()
 
-# Function to create MoM based on user input
+# Function to create MoM based on user input and handle long notes
 def create_mom(title, date, attendees, notes):
-    # Format attendees
+    # Format attendees based on the desired output
     formatted_attendees = ""
     for group in attendees:
         group_name = group.get("group_name", "")
         members = group.get("members", "")
-        formatted_attendees += f"\n{group_name}:\n"
-        formatted_attendees += "\n".join([f"- {member}" for member in members.split("|")])
+        member_list = [f"{idx + 1}. {member.strip()}" for idx, member in enumerate(members.split(";"))]
+        formatted_attendees += f"{group_name}:\n" + "\n".join(member_list) + "\n\n"
 
-    # Create the prompt
+    # Create a single prompt with the entire input
     prompt = f"""
-    Create a Minutes of Meeting (MoM) based on the following details:
+    Create a Minutes of Meeting (MoM) based strictly on the details provided below.
+    Do not add any extra information that is not present in the input:
     Title: {title}
     Date: {date}
     Attendees: {formatted_attendees}
     Notes: {notes}
-    Format the MoM with clear sections for 'Action Items' and 'Meeting Notes'.
+    Structure:
+    1. Title
+    2. Date
+    3. Attendee List
+    4. Action Items (concise)
+    5. Discussion Points (detailed, only use information provided in the Notes)
     """
-    # Use LangChain's OpenAI instance to generate response
-    response = llm(prompt)
-    
-    return response.strip()
+
+    try:
+        response = llm(prompt)
+        output = response.strip()
+        return output
+    except openai.error.InvalidRequestError as e:
+        # Handle token limit errors
+        return "Error: The input is too long to process. Please shorten the notes or attendees."
 
 # Route to render the front-end page
 @app.route('/')
@@ -50,7 +60,7 @@ def generate_mom():
     date = data.get('date', '')
     attendees = data.get('attendees', [])
     notes = data.get('notes', '')
-    
+
     # Generate the MoM
     mom = create_mom(title, date, attendees, notes)
     return jsonify({'mom': mom})

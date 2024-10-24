@@ -9,6 +9,13 @@ document.getElementById('mom-form').addEventListener('submit', function(event) {
   });
   const notes = document.getElementById('notes').value;
 
+  // Add loading state
+  const generateButton = document.querySelector('button');
+  const outputDiv = document.getElementById('mom-output');
+  generateButton.disabled = true;
+  generateButton.textContent = "Generating...";
+  outputDiv.textContent = ""; // Clear previous output
+
   fetch('/generate_mom', {
     method: 'POST',
     headers: {
@@ -23,7 +30,16 @@ document.getElementById('mom-form').addEventListener('submit', function(event) {
   })
   .then(response => response.json())
   .then(data => {
-    document.getElementById('mom-output').innerText = `Generated MoM:\n\n${data.mom}`;
+    // Remove loading state
+    generateButton.disabled = false;
+    generateButton.textContent = "Generate MoM";
+    outputDiv.innerText = `Generated MoM:\n\n${data.mom}`;
   })
-  .catch(error => console.error('Error:', error));
+  .catch(error => {
+    console.error('Error:', error);
+    // Handle error and reset button state
+    generateButton.disabled = false;
+    generateButton.textContent = "Generate MoM";
+    outputDiv.textContent = "Failed to generate MoM. Please try again.";
+  });
 });

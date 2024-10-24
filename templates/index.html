@@ -3,26 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manga Recommendation</title>
+  <title>MoM Generator</title>
   <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body>
   <div class="container">
-    <h1>Manga Recommendation App</h1>
-    <form id="recommendation-form">
-      <label for="preferred-genre">Preferred Genre:</label>
-      <input type="text" id="preferred-genre" name="preferred_genre" required>
+    <h1>Minutes of Meeting Generator</h1>
+    <form id="mom-form">
+      <label for="title">MoM Title:</label>
+      <input type="text" id="title" name="title" required>
       
-      <label for="last-read-manga">Last Read Manga:</label>
-      <input type="text" id="last-read-manga" name="last_read_manga" required>
+      <label for="date">Date:</label>
+      <input type="date" id="date" name="date" required>
       
-      <label for="complete-series">Complete Series (Yes/No):</label>
-      <input type="text" id="complete-series" name="complete_series" required>
+      <label for="attendees">Attendees (Group | Members):</label>
+      <textarea id="attendees" name="attendees" placeholder="Group | Attendee Name" required></textarea>
       
-      <button type="submit">Get Recommendation</button>
+      <label for="notes">Meeting Notes:</label>
+      <textarea id="notes" name="notes" required></textarea>
+      
+      <button type="submit">Generate MoM</button>
     </form>
     
-    <div id="recommendation-output"></div>
+    <div id="mom-output"></div>
   </div>
 
   <script src="/static/js/script.js"></script>
